@@ -1,14 +1,25 @@
 #!/bin/bash
 
-cd ~/Downloads/imagens-livros
+converte_imagem(){
+    cd ~/Downloads/imagens-livros
 
-if [ ! -d png ]
+    if [ ! -d png ]
+    then
+        mkdir png
+    fi
+
+    for imagem in *.jpg
+    do
+        local imagem_sem_extensao=$(ls $imagem | awk -F. '{ print $1 }')
+        convert $imagem png/$imagem_sem_extensao.png
+    done
+}
+
+converte_imagem>erros_conversao.txt
+
+if [ $? -eq 0]
 then
-    mkdir png
+    echo "Conversao realizada com sucesso!"
+else
+    echo "Houve algum erro no processo."
 fi
-
-for imagem in *.jpg
-do
-    imagem_sem_extensao=$(ls $imagem | awk -F. '{ print $1 }')
-    convert $imagem png/$imagem_sem_extensao.png
-done
